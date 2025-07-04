@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from 'react';
 import { useRouter }           from 'next/navigation'
+import { useAuthStore } from '@/store/authStore'
 
 export default function LoginPage() {
   const [username, setUsername] = useState('')
@@ -9,6 +10,7 @@ export default function LoginPage() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
 
+  const login = useAuthStore((state) => state.login)
   const router = useRouter()
 
   const handleSubmit = async (e: FormEvent) => {
@@ -23,6 +25,7 @@ export default function LoginPage() {
     setError('')
 
     try {
+      await login({ username, password })
       router.push('/products')
     } catch {
       setError('Incorrect data')
