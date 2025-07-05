@@ -1,6 +1,6 @@
 'use client'
 
-import styles from './ProductCard.module.scss'
+import styles from './productCard.module.scss'
 
 interface ProductCardProps {
   id: number
