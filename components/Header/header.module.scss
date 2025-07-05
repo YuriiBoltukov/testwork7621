@@ -1,0 +1,51 @@
+.header {
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  background-color: darkgray;
+  &_content {
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    &_link {
+      font-weight: bold;
+      font-size: 18px;
+      text-decoration: none;
+      color: #fff;
+    }
+    &_user {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      &_name {
+        font-size: 16px;
+        color: #fff;
+      }
+      &_btn {
+        background: transparent;
+        border: 1px solid #fff;
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.2s ease;
+        &:hover {
+          background-color: rgba(255, 255, 255, 0.2);
+        }
+      }
+    }
+    &_login {
+      font-size: 16px;
+      color: #fff;
+      text-decoration: none;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

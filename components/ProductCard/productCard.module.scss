@@ -1,0 +1,45 @@
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: #fff;
+  transition: box-shadow 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  }
+  &_image {
+    width: 100%;
+    height: auto;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+  &_title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+  }
+  &_category {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  &_price {
+    font-weight: bold;
+  }
+  &_button {
+    margin-top: auto;
+    padding: 8px 12px;
+    background-color: #222;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #444;
+    }
+  }
+}

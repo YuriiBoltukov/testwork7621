@@ -1,68 +1,92 @@
 'use client'
 
-import { FormEvent, useState } from 'react';
-import { useRouter }           from 'next/navigation'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/store/authStore'
+import { useState } from 'react'
+import styles from './login.module.scss'
+
+type FormData = {
+  username: string
+  password: string
+}
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>()
 
+  const [authError, setAuthError] = useState('')
   const login = useAuthStore((state) => state.login)
   const router = useRouter()
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault()
-
-    if (username.trim().length < 3 || password.trim().length < 3) {
-      setError('Minimum 3 characters')
-      return
-    }
-
-    setIsLoading(true)
-    setError('')
-
+  const onSubmit = async (data: FormData) => {
+    setAuthError('')
     try {
-      await login({ username, password })
+      await login(data)
       router.push('/products')
     } catch {
-      setError('Incorrect data')
-    } finally {
-      setIsLoading(false)
+      setAuthError('Login failed. Please check your credentials.')
     }
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4">
-      <h1 className="text-2xl font-semibold mb-6">Login</h1>
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm flex flex-col gap-4 bg-white p-6 rounded-lg shadow-md"
-      >
-        <input
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          className="border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:border-blue-400"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="border border-gray-300 px-4 py-2 rounded focus:outline-none focus:ring focus:border-blue-400"
-        />
+    <div className={styles.login}>
+      <h1 className={styles.login_title}>Login</h1>
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.login_form}>
+        <div className={styles.login_form_container}>
+          <input
+            type="text"
+            placeholder="Username"
+            {...register('username', {
+              required: 'Enter your username',
+              minLength: {
+                value: 3,
+                message: 'Minimum 3 characters',
+              },
+            })}
+            className={styles.login_form_container_input}
+          />
+          {errors.username && (
+            <p className={styles.login_form_container_error}>
+              {errors.username.message}
+            </p>
+          )}
+        </div>
+
+        <div className={styles.login_form_container}>
+          <input
+            type="password"
+            placeholder="Password"
+            {...register('password', {
+              required: 'Enter your password',
+              minLength: {
+                value: 3,
+                message: 'Minimum 3 characters',
+              },
+            })}
+            className={styles.login_form_container_input}
+          />
+          {errors.password && (
+            <p className={styles.login_form_container_error}>
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
         <button
           type="submit"
-          disabled={isLoading}
-          className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 disabled:opacity-50"
+          disabled={isSubmitting}
+          className={styles.login_form_btn}
         >
-          {isLoading ? 'Loading...' : 'Login'}
+          {isSubmitting ? 'Loading...' : 'Login'}
         </button>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
+
+        {authError && (
+          <p className={styles.login_form_container_error}>{authError}</p>
+        )}
       </form>
     </div>
   )

@@ -1,9 +1,11 @@
 'use client'
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
-import { useAuthStore } from '@/store/authStore'
-import { useProductStore } from '@/store/productStore'
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
+import { useProductStore } from '@/store/productStore';
+import ProductCard from '@/components/ProductCard/ProductCard';
+import styles from './productsPage.module.scss';
 
 export default function ProductsPage() {
   const { user } = useAuthStore()
@@ -21,30 +23,23 @@ export default function ProductsPage() {
   if (!user) return null
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Products</h1>
+    <div className={styles.page}>
+      <h1 className={styles.page_title}>Products</h1>
 
       {isLoading && <p>Loading...</p>}
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className={styles.page_error}>{error}</p>}
 
-      <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className={styles.page_productsList}>
         {products.map((product) => (
-          <div
+          <ProductCard
             key={product.id}
-            className="border rounded-lg p-4 flex flex-col"
-          >
-            <img
-              src={product.thumbnail}
-              alt={product.title}
-              className="w-full h-40 object-cover rounded mb-2"
-            />
-            <h2 className="font-semibold">{product.title}</h2>
-            <p className="text-sm text-gray-500">{product.category}</p>
-            <p className="mt-1 font-bold">${product.price}</p>
-            <button className="mt-auto bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Add to cart
-            </button>
-          </div>
+            id={product.id}
+            title={product.title}
+            category={product.category}
+            price={product.price}
+            thumbnail={product.thumbnail}
+            showButton={!!user}
+          />
         ))}
       </div>
     </div>

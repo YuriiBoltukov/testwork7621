@@ -24,17 +24,17 @@ export const useAuthStore = create<AuthState>((set) => ({
   user: null,
   token: null,
 
-  login: async ({ username, password }) => {
+  login: async ({ username, password }: LoginPayload): Promise<void> => {
     const res = await axios.post('https://dummyjson.com/auth/login', {
       username,
       password,
     })
 
-    const user = res.data
+    const user: User = res.data
     set({ user, token: user.token })
   },
 
-  logout: () => {
+  logout: (): void => {
     set({ user: null, token: null })
   },
 }))
